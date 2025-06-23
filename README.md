@@ -1,8 +1,8 @@
 # TimeClock Pro - Employee Time Management System
 
-!!!!!MySQL & SQLite Options!!!!
-
 A comprehensive web-based employee time tracking system with PIN-based authentication, designed for shared kiosk environments.
+
+!!!CHOOSE BETWEEN MySQL OR SQLite!!!
 
 ## Features
 
@@ -75,14 +75,13 @@ For production use or multiple concurrent users:
 
 Replace `username` and `password` with your MySQL credentials.
 
-## Default Admin Users
+## Default Admin User
 
-The system comes with two pre-configured admin users:
+The system comes with one pre-configured admin user:
 
-- **Joshua Cox** - PIN: `1003`
-- **Matt McVeigh** - PIN: `1008`
+- **Administrator** - PIN: `0000`
 
-Both users have full administrative privileges and can:
+This admin user has full administrative privileges and can:
 - Manage employees
 - View all punches and reports
 - Approve time-off requests
@@ -99,7 +98,7 @@ Both users have full administrative privileges and can:
 5. Request time corrections if needed
 
 ### For Administrators
-1. Log in with admin PIN (1003 or 1008)
+1. Log in with admin PIN (0000)
 2. Access admin dashboard for full system management
 3. Add/edit/delete employees
 4. Manage punch records
