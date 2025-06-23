@@ -1,0 +1,7 @@
+Improve configuration and exclude unnecessary files from being tracked
+
+Updates .env.example with database configuration hints and adjusts .gitignore to exclude build artifacts, the database, and the archive.
+
+Replit-Commit-Author: Agent
+Replit-Commit-Session-Id: ef653578-e6df-479e-aaf9-fd690252277d
+Replit-Commit-Screenshot-Url: https://storage.googleapis.com/screenshot-production-us-central1/5d61232f-0a6b-457d-b2cd-fea85d064828/7ae41b18-d345-427c-b4c0-381b697c7fc6.jpg
