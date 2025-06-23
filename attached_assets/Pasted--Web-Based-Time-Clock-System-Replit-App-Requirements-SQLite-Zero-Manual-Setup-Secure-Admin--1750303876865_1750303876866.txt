@@ -1,0 +1,328 @@
+🕒 Web-Based Time Clock System – Replit App Requirements (SQLite, Zero Manual Setup, Secure Admin)
+📌 Project Overview
+Goal:
+Create a complete, production-ready, fully web-based time clock system for employee punch-in/out, to be run and hosted entirely in a single Replit project.
+
+Core Constraints:
+
+No external database or APIs (no Supabase, Firebase, etc.)
+
+Use only SQLite for persistent storage
+
+System must be 100% browser-based (no app installs/downloads)
+
+Must work on desktops, tablets, and kiosks
+
+No manual setup or file creation—everything auto-initializes on first run
+
+🔧 Functional Requirements
+👷 Employee Portal
+PIN Login
+
+Employees log in using a unique 4–6 digit PIN (no email, username, or password)
+
+PINs are stored securely and must be unique
+
+Punch In / Out
+
+Upon login, display current punch status (“Clocked out” or “Clocked in at [time]”)
+
+One button toggles between “Clock In” and “Clock Out”
+
+Record each punch with:
+
+Punch type (“in” or “out”)
+
+Timestamp (system time, store in UTC)
+
+Employee ID reference
+
+Geolocation: Use browser Geolocation API (if allowed)
+
+IP address: Always record (as fallback or backup)
+
+View Punch History
+
+Allow user to select a date range (calendar picker)
+
+Display all punches for the range, sorted by timestamp
+
+Show total hours summary for the period
+
+Correction Requests (Optional)
+
+Allow user to submit a correction request for a punch (simple note or form)
+
+Show confirmation message on submission
+
+Geofencing
+
+On each punch, prompt for geolocation
+
+If geofencing is enforced and location is outside allowed zone, block punch and show warning
+
+If location is unavailable (user denies), allow punch but flag as “location unknown” for admin review
+
+🧑‍💼 Admin Portal
+Secure Login
+
+On first run, the app seeds the database with a default admin password (e.g., admin123), securely hashed.
+
+Admin logs in using this default password.
+
+After logging in, the admin can and should change their password in the admin settings panel.
+
+All admin password logic uses a hash stored in the database—never in plaintext or hardcoded in the code after setup.
+
+If the default password is still active, display a prominent warning and encourage immediate change.
+
+Employee Management
+
+List all employees (active/inactive)
+
+Add new employee (name + PIN)
+
+Edit employee (name, PIN, active status)
+
+Deactivate or delete employee
+
+Punch Management
+
+List all punches (filter by employee, date range)
+
+Add/edit/delete punches
+
+Approve/flag punches as needed
+
+View correction requests and update status (approve/deny)
+
+Settings Panel
+
+Set and update:
+
+Company name
+
+Company logo URL (optional, displayed in UI)
+
+Theme color (HEX/CSS)
+
+Geofencing controls (enable/disable, center lat/lon, radius in meters)
+
+Admin password (changeable after login)
+
+Reporting & Export
+
+Filter punches by employee and date range
+
+Display total hours worked for selection
+
+Export filtered punches to CSV
+
+Dashboard Overview
+
+Show stats: total punches today, active employees, etc.
+
+Geofencing Controls
+
+Toggle geofencing enforcement on/off
+
+Set center location and radius
+
+View punch locations (lat/lon, optional map)
+
+List/flag punches outside allowed area or with unknown location
+
+📍 Geofencing
+Location Capture:
+
+On every punch attempt, get location using browser Geolocation API
+
+Save latitude and longitude in the punch record
+
+Save IP address for every punch (for fallback/logging)
+
+Safe Zone Enforcement:
+
+Admin can enable/disable geofencing enforcement
+
+Admin sets allowed zone (lat/lon/radius in meters)
+
+If enforced, block punches outside allowed zone; if not enforced, flag punches outside zone for review
+
+If user denies geolocation, allow punch but mark as “location unknown”
+
+Reporting:
+
+Admin UI displays location data per punch
+
+Option to view “flagged” punches (outside zone or location denied)
+
+💾 Database Schema (SQLite)
+On first run, the app must automatically create all tables if they do not exist, and seed with default data if empty (admin user, example employee, demo punches).
+
+Tables
+employees
+
+Field	Type	Notes
+id	UUID	Primary key
+name	Text	
+pin	Text	4–6 digit, unique
+is_active	Boolean	
+
+punches
+
+Field	Type	Notes
+id	UUID	Primary key
+employee_id	UUID	Foreign key to employees
+punch_type	Text	"in" or "out"
+timestamp	Datetime	Stored in UTC
+latitude	Float	Geolocation
+longitude	Float	Geolocation
+ip_address	Text	Fallback if geolocation fails
+flagged	Boolean	Out-of-zone or denied location
+
+settings
+
+Field	Type	Notes
+company_name	Text	
+logo_url	Text	Optional
+theme_color	Text	HEX or CSS color
+geo_lat	Float	Safe zone center latitude
+geo_lon	Float	Safe zone center longitude
+geo_radius	Float	Safe zone radius (meters)
+geofencing_enabled	Boolean	
+admin_password_hash	Text	Securely hashed, not plaintext
+
+corrections (Optional)
+
+Field	Type	Notes
+id	UUID	Primary key
+employee_id	UUID	
+punch_id	UUID	Related punch
+date	Date	
+note	Text	Employee explanation
+status	Text	Pending/Approved/Denied
+
+🧑‍💻 Technical & Implementation Requirements
+Automatic Initialization
+
+On startup, app checks for and creates all necessary tables if missing.
+
+If tables are empty, app seeds with a default admin (password hash only), demo employee, and example punches.
+
+Frontend
+
+Use HTML/CSS/JS or React (your choice)
+
+Fully responsive for desktop/tablet/kiosk
+
+Large, clear buttons and forms
+
+Separate, visually distinct Employee and Admin portals
+
+Prominent company branding and theme
+
+Backend
+
+All server logic and database access via standard Node.js (Express recommended) or Python (Flask)
+
+Use sqlite3 (Node) or sqlite3 (Python) to interact with SQLite file (data.db)
+
+Database and code files must be organized and documented
+
+Clearly indicate in code where to update branding, admin password, geofencing, etc.
+
+Security
+
+Employee PINs must be unique and not exposed in frontend code
+
+Admin password must be hashed and stored in the database only.
+
+Admin can change their password at any time from the settings panel
+
+If default password is still active, show a prominent warning
+
+Separate authentication/session for admin
+
+Limit login attempts for both PIN and admin password
+
+Never expose sensitive info in frontend code
+
+Export & Reporting
+
+CSV export must work in-browser (no manual download from server required)
+
+Total hours calculations must be accurate (no double-counting)
+
+Geofencing
+
+Geolocation prompt on every punch
+
+If location is outside allowed zone (when enabled), block punch and warn user
+
+If location is denied, flag punch for admin review
+
+All punch location data shown in admin UI
+
+Correction Requests
+
+Employees can submit correction requests
+
+Admin sees, approves/denies, and marks as resolved
+
+Correction request status visible to employee
+
+Documentation
+
+Comments and documentation throughout the codebase
+
+README or in-app guide for:
+
+Customizing company name/logo/theme
+
+Changing admin password (after first login)
+
+Enabling/disabling geofencing
+
+Exporting data
+
+Portability
+
+Code and database are portable to any standard Node.js or Python host—do not use any Replit-specific APIs (@replit/database etc.)
+
+Database file should be downloadable and restorable
+
+All dependencies documented in package.json or requirements.txt
+
+🎨 UI & UX
+Modern, clean, and touch-friendly design
+
+Branding (name/logo/theme) editable in settings
+
+Employee/Admin sections visually distinct
+
+Friendly error/success/status messages
+
+Optional dark mode
+
+📤 Deployment
+App must be fully runnable in Replit with a single "Run"
+
+No manual setup, table creation, or file uploads required
+
+First-run state provides immediate access (demo admin, employee, punches)
+
+✅ Deliverables
+Complete, well-organized Replit project with all code and database schema.
+
+Automatic table creation and seeding logic.
+
+Secure admin password handling (default on first run, changeable after login, never hardcoded after setup).
+
+Clear code comments and documentation for customizing settings and deployment.
+
+Test flows for both admin and employee users.
+
+All described features implemented—nothing omitted.
+
+Build this application exactly as described above, with all features implemented, all setup and initialization automatic, and all admin password handling secure and changeable via the admin UI.
