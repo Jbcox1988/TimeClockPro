@@ -201,16 +201,9 @@ export class SqliteStorage implements IStorage {
       );
     });
 
-    // Seed initial employees
+    // Seed initial admin user
     const employees = [
-      { name: "Aidan McVeigh", pin: "1001", isAdmin: false },
-      { name: "Easton Black", pin: "1002", isAdmin: false },
-      { name: "Joshua Cox", pin: "1003", isAdmin: true },
-      { name: "Mackenzie Gill", pin: "1004", isAdmin: false },
-      { name: "Rita Medrano", pin: "1005", isAdmin: false },
-      { name: "Sam Mungioli", pin: "1006", isAdmin: false },
-      { name: "Sylvia Rodriguez", pin: "1007", isAdmin: false },
-      { name: "Matt McVeigh", pin: "1008", isAdmin: true }
+      { name: "Administrator", pin: "0000", isAdmin: true }
     ];
 
     for (const employee of employees) {
