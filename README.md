@@ -1,5 +1,7 @@
 # TimeClock Pro - Employee Time Management System
 
+!!!!!MySQL & SQLite Options!!!!
+
 A comprehensive web-based employee time tracking system with PIN-based authentication, designed for shared kiosk environments.
 
 ## Features
